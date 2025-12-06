@@ -1,0 +1,33 @@
+name: C++ CI - Build and Run Tests
+
+on:
+  push:
+    branches:
+      - main  # 每次推送到 main 分支时触发工作流
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest  # 使用 GitHub 提供的 Ubuntu 环境
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2  # 检出代码
+
+    - name: Set up C++ environment
+      run: |
+        sudo apt update
+        sudo apt install -y g++ cmake libgtest-dev  # 安装 g++、cmake 和 Google Test
+
+    - name: Create build directory
+      run: mkdir build  # 创建构建目录
+
+    - name: Build the project
+      run: |
+        cd build
+        cmake ..  # 配置 CMake 项目
+        make  # 编译项目
+
+    - name: Run tests
+      run: |
+        cd build
+        ./unit_test_demo  # 运行你的测试可执行文件
